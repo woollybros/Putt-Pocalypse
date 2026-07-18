@@ -149,6 +149,38 @@
         () => MenuController.exitToMenu()
     );
 
+    /*
+        Block every developer-only keyboard shortcut unless Dev Start is active.
+        Capture phase runs before the existing input and developer listeners.
+    */
+    document.addEventListener(
+        "keydown",
+        event => {
+            const developerKeys = [
+                "r",
+                "c",
+                "[",
+                "]",
+                "z",
+                "x"
+            ];
+
+            const key = event.key.toLowerCase();
+
+            if (
+                developerKeys.includes(key) &&
+                (
+                    MenuController.developerMode !== true ||
+                    MenuController.state !== "playing"
+                )
+            ) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+            }
+        },
+        true
+    );
+
     document.addEventListener(
         "keydown",
         event => {
