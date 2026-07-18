@@ -9,12 +9,81 @@
         <title>Putt-Pocalypse</title>
 
         <link rel="stylesheet" href="style.css">
-    
     </head>
 
     <body>
 
         <canvas id="gameCanvas"></canvas>
+
+        <div id="startScreen" class="gameOverlay">
+            <div class="titleBackdrop"></div>
+
+            <div class="menuCard titleCard">
+                <div class="titleKicker">
+                    The dead have risen.
+                    Tee time is still at nine.
+                </div>
+
+                <h1 class="gameTitle">
+                    <span class="puttWord">Putt</span><span class="dashWord">-</span><span class="pocalypseWord">Pocalypse!</span>
+                </h1>
+
+                <div class="titleDivider">
+                    <span></span>
+                    <div class="golfBallMark">⛳</div>
+                    <span></span>
+                </div>
+
+                <p class="titleTagline">
+                    Sink putts. Dodge zombies. Survive the course.
+                </p>
+
+                <div class="menuActions">
+                    <button id="startGameButton" class="primaryMenuButton">
+                        Start
+                    </button>
+
+                    <button id="devStartGameButton" class="devMenuButton">
+                        Dev Start
+                    </button>
+                </div>
+
+                <div class="menuHint">
+                    Dev Start enables testing controls and the developer HUD.
+                </div>
+            </div>
+        </div>
+
+        <button id="pauseGameButton" class="pauseCornerButton hidden">
+            Pause
+        </button>
+
+        <div id="pausePanel" class="gameOverlay hidden">
+            <div class="menuCard pauseCard">
+                <div class="pauseEyebrow">Round Suspended</div>
+                <h2>Paused</h2>
+
+                <div class="pauseBall">●</div>
+
+                <div class="menuActions pauseActions">
+                    <button id="resumeGameButton" class="primaryMenuButton">
+                        Continue
+                    </button>
+
+                    <button id="pauseResetButton">
+                        Reset Hole
+                    </button>
+
+                    <button id="exitToMenuButton" class="dangerMenuButton">
+                        Exit to Menu
+                    </button>
+                </div>
+
+                <div class="menuHint">
+                    Press Esc or P to continue.
+                </div>
+            </div>
+        </div>
 
         <div id="holeCompletePanel" class="hidden">
             <div class="resultsCard">
@@ -86,5 +155,6 @@
         <script src="js/zombie-debug-and-circular-golfer.js"></script>
         <script src="js/game.js"></script>
         <script src="js/developer-controls.js"></script>
+        <script src="js/menu-and-pause.js"></script>
     </body>
 </html>
