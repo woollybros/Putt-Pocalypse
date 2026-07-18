@@ -1,21 +1,27 @@
 /*
     Zombie developer controls and circular golfer visual.
 
-    This module is intentionally loaded after the existing player-boundary
-    module so it can keep the fixed-camera boundary while simplifying the
-    golfer artwork.
+    Debug controls remain installed, but only become interactive and visible
+    when the game is launched through Dev Start.
 */
-
 (function () {
     const ZombieDebug = {
         isPaused: false,
 
         togglePause() {
+            if (window.DeveloperModeActive !== true) {
+                return;
+            }
+
             this.isPaused = !this.isPaused;
             this.updateButtons();
         },
 
         removeAll() {
+            if (window.DeveloperModeActive !== true) {
+                return;
+            }
+
             Zombies.clear();
             this.updateButtons();
         },
@@ -42,16 +48,14 @@
 
     window.ZombieDebug = ZombieDebug;
 
-    /*
-        Pause zombie thinking, movement, and attacks while leaving the player,
-        ball, aiming, and course animation active. Frozen zombies still behave
-        as physical obstacles for the ball.
-    */
     const originalZombieUpdate =
         Zombies.update.bind(Zombies);
 
     Zombies.update = function (deltaTime) {
-        if (ZombieDebug.isPaused) {
+        if (
+            window.DeveloperModeActive === true &&
+            ZombieDebug.isPaused
+        ) {
             for (const zombie of this.items) {
                 zombie.velocityX = 0;
                 zombie.velocityY = 0;
@@ -67,17 +71,16 @@
         Zombies.handlePlayerAttacks.bind(Zombies);
 
     Zombies.handlePlayerAttacks = function () {
-        if (ZombieDebug.isPaused) {
+        if (
+            window.DeveloperModeActive === true &&
+            ZombieDebug.isPaused
+        ) {
             return;
         }
 
         originalHandlePlayerAttacks();
     };
 
-    /*
-        Build the controls here instead of hard-coding them into the page.
-        This keeps the debug feature removable as one module later.
-    */
     const developerControls =
         document.getElementById("developerControls");
 
@@ -103,15 +106,14 @@
     ZombieDebug.removeButton = removeButton;
     ZombieDebug.updateButtons();
 
-    /*
-        Keyboard shortcuts:
-        Z = pause/resume zombies
-        X = remove zombies from the current hole
-    */
     document.addEventListener(
         "keydown",
         event => {
-            if (event.repeat) {
+            if (
+                event.repeat ||
+                window.DeveloperModeActive !== true ||
+                window.MenuController?.state !== "playing"
+            ) {
                 return;
             }
 
@@ -125,11 +127,7 @@
         }
     );
 
-    /*
-        Return to the compact circular arcade silhouette. The original head,
-        cap, face, aiming guide, dropped club, and equipped-club animation are
-        still drawn by player.js and the equipped-club modules.
-    */
+    /* Compact circular arcade silhouette. */
     Player.drawGolferBody = function () {
         if (this.isDead) {
             return;
@@ -140,7 +138,6 @@
 
         ctx.save();
 
-        /* Circular shirt/body. */
         ctx.beginPath();
         ctx.arc(
             this.x,
@@ -164,7 +161,7 @@
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        /* A simple shirt stripe gives the circle a readable front. */
+        /* Shirt stripe. */
         ctx.beginPath();
         ctx.arc(
             this.x,
@@ -177,7 +174,7 @@
         ctx.lineWidth = 4;
         ctx.stroke();
 
-        /* Small feet keep movement direction visually grounded. */
+        /* Small feet. */
         ctx.beginPath();
         ctx.moveTo(this.x - 11, bodyCenterY + 16);
         ctx.lineTo(this.x - 3, bodyCenterY + 16);
@@ -191,10 +188,6 @@
         ctx.restore();
     };
 
-    /*
-        The circular body does not extend as far downward as the previous
-        torso-and-legs artwork, so use the regular circular boundary clearance.
-    */
     Player.clampToScreen = function () {
         const minimumX =
             this.radius + this.screenBoundaryPadding;
@@ -227,6 +220,10 @@
     };
 
     function drawZombieDeveloperHud() {
+        if (window.DeveloperModeActive !== true) {
+            return;
+        }
+
         const panelWidth = 225;
         const panelHeight = 150;
         const panelX = canvas.width - panelWidth - 18;
@@ -237,30 +234,18 @@
             : "Dropped";
 
         ctx.save();
-
         ctx.fillStyle = "rgba(0, 0, 0, 0.68)";
-        ctx.fillRect(
-            panelX,
-            panelY,
-            panelWidth,
-            panelHeight
-        );
+        ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
 
         ctx.strokeStyle = ZombieDebug.isPaused
             ? "#e35a5a"
             : "rgba(255, 255, 255, 0.45)";
         ctx.lineWidth = 2;
-        ctx.strokeRect(
-            panelX,
-            panelY,
-            panelWidth,
-            panelHeight
-        );
+        ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
 
         ctx.fillStyle = "white";
         ctx.textAlign = "left";
         ctx.font = "bold 15px Arial";
-
         ctx.fillText(
             "DEVELOPER STATUS",
             panelX + 14,
@@ -293,13 +278,15 @@
         ctx.restore();
     }
 
-    /* Draw the status panel after the golfer and shot guide. */
     const originalPlayerDraw =
         Player.draw.bind(Player);
 
     Player.draw = function () {
         originalPlayerDraw();
         drawZombieDeveloperHud();
-        ZombieDebug.updateButtons();
+
+        if (window.DeveloperModeActive === true) {
+            ZombieDebug.updateButtons();
+        }
     };
 })();
