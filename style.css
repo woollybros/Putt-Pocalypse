@@ -1,0 +1,155 @@
+html,
+body {
+    margin:0;
+    padding:0;
+
+    overflow:hidden;
+
+    background:#222;
+}
+
+canvas {
+
+    display:block;
+    touch-action: none;
+
+}
+
+#developerControls {
+    position: fixed;
+
+    top: 16px;
+    right: 16px;
+
+    display: none;
+    gap: 10px;
+
+    z-index: 10;
+}
+
+#developerControls button {
+    padding: 10px 14px;
+
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    border-radius: 6px;
+
+    background: rgba(20, 20, 20, 0.8);
+    color: white;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#developerControls button:hover {
+    background: rgba(60, 60, 60, 0.9);
+}
+
+#developerControls button:active {
+    transform: translateY(1px);
+}
+
+.hidden {
+    display: none !important;
+}
+
+#holeCompletePanel {
+    position: fixed;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        rgba(0, 0, 0, 0.65);
+
+    z-index: 20;
+}
+
+.resultsCard {
+    width: min(
+        320px,
+        calc(100vw - 40px)
+    );
+
+    padding: 28px;
+
+    border: 2px solid #d9d1b8;
+    border-radius: 12px;
+
+    background: #202020;
+
+    color: white;
+    text-align: center;
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, 0.65);
+}
+
+.resultsCard h2 {
+    margin:
+        0
+        0
+        8px;
+
+    font-size: 28px;
+}
+
+#holeCompleteName {
+    margin:
+        0
+        0
+        22px;
+
+    color: #c9c9c9;
+}
+
+.scoreRow {
+    display: flex;
+    justify-content: space-between;
+
+    margin: 10px 0;
+
+    padding-bottom: 8px;
+
+    border-bottom:
+        1px solid
+        rgba(255, 255, 255, 0.15);
+
+    font-size: 18px;
+}
+
+.scoreResult {
+    margin:
+        24px
+        0;
+
+    font-size: 32px;
+    font-weight: bold;
+}
+
+#continueButton {
+    width: 100%;
+
+    padding: 12px 18px;
+
+    border: 2px solid #d9d1b8;
+    border-radius: 8px;
+
+    background: #353535;
+    color: white;
+
+    font-size: 18px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#continueButton:hover {
+    background: #484848;
+}

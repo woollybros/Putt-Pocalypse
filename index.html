@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0">
+
+        <title>Putt-Pocalypse</title>
+
+        <link rel="stylesheet" href="style.css">
+    
+    </head>
+
+    <body>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="holeCompletePanel" class="hidden">
+            <div class="resultsCard">
+                <h2 id="holeCompleteTitle">
+                    Hole Complete
+                </h2>
+
+                <p id="holeCompleteName"></p>
+
+                <div class="scoreRow">
+                    <span>Par</span>
+                    <span id="holeCompletePar">0</span>
+                </div>
+
+                <div class="scoreRow">
+                    <span>Strokes</span>
+                    <span id="holeCompleteStrokes">0</span>
+                </div>
+
+                <div
+                    id="holeCompleteResult"
+                    class="scoreResult"
+                >
+                    Par
+                </div>
+
+                <button id="continueButton">
+                    Continue
+                </button>
+            </div>
+        </div>
+
+        <div id="developerControls">
+            <button id="resetButton">
+                Reset Hole
+            </button>
+
+            <button id="switchClubButton">
+                Switch Club
+            </button>
+        </div>
+        
+        <script src="js/globals.js"></script>
+        <script src="js/gamestate.js"></script>
+        <script src="js/input.js"></script>
+        <script src="js/clubs.js"></script>
+        <script src="js/audio.js"></script>
+        <script src="js/player.js"></script>
+        <script src="js/hole.js"></script>
+        <script src="js/ball.js"></script>
+        <script src="js/zombie.js"></script>
+        <script src="js/camera.js"></script>
+        <script src="js/world.js"></script>
+        <script src="js/game.js"></script>
+    </body>
+</html>
