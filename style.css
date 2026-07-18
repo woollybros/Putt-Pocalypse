@@ -21,8 +21,12 @@ canvas {
     top: 16px;
     right: 16px;
 
-    display: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
     gap: 10px;
+
+    max-width: 520px;
 
     z-index: 10;
 }
@@ -43,12 +47,17 @@ canvas {
     cursor: pointer;
 }
 
-#developerControls button:hover {
+#developerControls button:hover:not(:disabled) {
     background: rgba(60, 60, 60, 0.9);
 }
 
-#developerControls button:active {
+#developerControls button:active:not(:disabled) {
     transform: translateY(1px);
+}
+
+#developerControls button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
 }
 
 .hidden {
