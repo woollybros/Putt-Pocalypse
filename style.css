@@ -1,57 +1,53 @@
 html,
 body {
-    margin:0;
-    padding:0;
-
-    overflow:hidden;
-
-    background:#222;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: #161b16;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 canvas {
-
-    display:block;
+    display: block;
     touch-action: none;
+}
 
+.hidden {
+    display: none !important;
 }
 
 #developerControls {
     position: fixed;
-
     top: 16px;
     right: 16px;
-
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-end;
     gap: 10px;
-
     max-width: 520px;
-
     z-index: 10;
 }
 
-#developerControls button {
+#developerControls button,
+.pauseCornerButton {
     padding: 10px 14px;
-
     border: 2px solid rgba(255, 255, 255, 0.75);
     border-radius: 6px;
-
-    background: rgba(20, 20, 20, 0.8);
+    background: rgba(20, 20, 20, 0.82);
     color: white;
-
     font-family: Arial, sans-serif;
     font-size: 14px;
     font-weight: bold;
-
     cursor: pointer;
 }
 
-#developerControls button:hover:not(:disabled) {
-    background: rgba(60, 60, 60, 0.9);
+#developerControls button:hover:not(:disabled),
+.pauseCornerButton:hover {
+    background: rgba(60, 60, 60, 0.94);
 }
 
-#developerControls button:active:not(:disabled) {
+#developerControls button:active:not(:disabled),
+.pauseCornerButton:active {
     transform: translateY(1px);
 }
 
@@ -60,105 +56,278 @@ canvas {
     cursor: not-allowed;
 }
 
-.hidden {
-    display: none !important;
+.pauseCornerButton {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 15;
+    min-width: 94px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.gameOverlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 38%, rgba(119, 168, 83, 0.24), transparent 34%),
+        linear-gradient(180deg, rgba(8, 13, 9, 0.82), rgba(5, 7, 5, 0.96));
+    z-index: 40;
+}
+
+.titleBackdrop {
+    position: absolute;
+    inset: -12%;
+    opacity: 0.22;
+    transform: rotate(-5deg) scale(1.08);
+    background:
+        repeating-linear-gradient(
+            135deg,
+            transparent 0,
+            transparent 38px,
+            rgba(218, 190, 59, 0.2) 38px,
+            rgba(218, 190, 59, 0.2) 48px
+        ),
+        radial-gradient(circle at 18% 72%, #35592d 0 3%, transparent 3.2%),
+        radial-gradient(circle at 82% 24%, #5d2323 0 4%, transparent 4.2%);
+}
+
+.menuCard {
+    position: relative;
+    width: min(560px, calc(100vw - 42px));
+    box-sizing: border-box;
+    padding: 40px 44px;
+    border: 3px solid #d8c76c;
+    border-radius: 18px;
+    background:
+        linear-gradient(180deg, rgba(30, 38, 29, 0.98), rgba(14, 18, 14, 0.98));
+    color: white;
+    text-align: center;
+    box-shadow:
+        0 0 0 7px rgba(8, 10, 8, 0.8),
+        0 22px 70px rgba(0, 0, 0, 0.72),
+        inset 0 0 45px rgba(120, 155, 78, 0.08);
+}
+
+.titleCard::before,
+.pauseCard::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.11);
+    border-radius: 11px;
+    pointer-events: none;
+}
+
+.titleKicker,
+.pauseEyebrow {
+    color: #d8c76c;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
+
+.gameTitle {
+    margin: 16px 0 10px;
+    font-size: clamp(46px, 8vw, 82px);
+    line-height: 0.88;
+    letter-spacing: -4px;
+    text-transform: uppercase;
+    transform: skew(-4deg) rotate(-1deg);
+    text-shadow:
+        4px 4px 0 #0b0d0b,
+        7px 7px 0 rgba(0, 0, 0, 0.38);
+}
+
+.puttWord {
+    color: #e6d66f;
+}
+
+.dashWord {
+    color: #f0eee0;
+}
+
+.pocalypseWord {
+    color: #a74a43;
+}
+
+.titleDivider {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 15px;
+}
+
+.titleDivider span {
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #d8c76c);
+}
+
+.titleDivider span:last-child {
+    background: linear-gradient(90deg, #d8c76c, transparent);
+}
+
+.golfBallMark {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #ecebdc;
+    color: #2e4b29;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.titleTagline {
+    margin: 0 0 26px;
+    color: #cdd5c8;
+    font-size: 18px;
+    letter-spacing: 0.4px;
+}
+
+.menuActions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.menuActions button {
+    min-height: 58px;
+    padding: 13px 18px;
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-radius: 9px;
+    color: white;
+    font-size: 19px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 120ms ease, filter 120ms ease;
+}
+
+.menuActions button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.12);
+}
+
+.primaryMenuButton {
+    background: linear-gradient(180deg, #68914f, #3e6633);
+}
+
+.devMenuButton {
+    background: linear-gradient(180deg, #70512d, #4b341e);
+}
+
+.dangerMenuButton {
+    background: linear-gradient(180deg, #8c403b, #5d2926);
+}
+
+.menuHint {
+    margin-top: 18px;
+    color: #8f9b8b;
+    font-size: 13px;
+}
+
+.pauseCard {
+    width: min(420px, calc(100vw - 42px));
+}
+
+.pauseCard h2 {
+    margin: 12px 0 4px;
+    color: #e9e7d8;
+    font-size: 48px;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+.pauseBall {
+    margin: 7px 0 24px;
+    color: #d8c76c;
+    font-size: 25px;
+}
+
+.pauseActions {
+    grid-template-columns: 1fr;
 }
 
 #holeCompletePanel {
     position: fixed;
-
     inset: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background:
-        rgba(0, 0, 0, 0.65);
-
+    background: rgba(0, 0, 0, 0.65);
     z-index: 20;
 }
 
 .resultsCard {
-    width: min(
-        320px,
-        calc(100vw - 40px)
-    );
-
+    width: min(320px, calc(100vw - 40px));
     padding: 28px;
-
     border: 2px solid #d9d1b8;
     border-radius: 12px;
-
     background: #202020;
-
     color: white;
     text-align: center;
-
-    box-shadow:
-        0 12px 35px
-        rgba(0, 0, 0, 0.65);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
 }
 
 .resultsCard h2 {
-    margin:
-        0
-        0
-        8px;
-
+    margin: 0 0 8px;
     font-size: 28px;
 }
 
 #holeCompleteName {
-    margin:
-        0
-        0
-        22px;
-
+    margin: 0 0 22px;
     color: #c9c9c9;
 }
 
 .scoreRow {
     display: flex;
     justify-content: space-between;
-
     margin: 10px 0;
-
     padding-bottom: 8px;
-
-    border-bottom:
-        1px solid
-        rgba(255, 255, 255, 0.15);
-
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     font-size: 18px;
 }
 
 .scoreResult {
-    margin:
-        24px
-        0;
-
+    margin: 24px 0;
     font-size: 32px;
     font-weight: bold;
 }
 
 #continueButton {
     width: 100%;
-
     padding: 12px 18px;
-
     border: 2px solid #d9d1b8;
     border-radius: 8px;
-
     background: #353535;
     color: white;
-
     font-size: 18px;
     font-weight: bold;
-
     cursor: pointer;
 }
 
 #continueButton:hover {
     background: #484848;
+}
+
+@media (max-width: 620px) {
+    .menuCard {
+        padding: 32px 24px;
+    }
+
+    .gameTitle {
+        letter-spacing: -2px;
+    }
+
+    .menuActions {
+        grid-template-columns: 1fr;
+    }
 }
