@@ -196,13 +196,10 @@
             return;
         }
 
-        if (window.MenuController && window.MenuController.state !== "playing") {
-            return;
-        }
-
-        const developerControls = document.getElementById("developerControls");
-
-        if (developerControls && developerControls.style.display === "none") {
+        if (
+            window.DeveloperModeActive !== true ||
+            (window.MenuController && window.MenuController.state !== "playing")
+        ) {
             return;
         }
 
