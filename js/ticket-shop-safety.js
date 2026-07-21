@@ -36,11 +36,13 @@
 
     window.update = function (deltaTime) {
         const economy = window.TicketEconomy;
-        const shopOpen = !document.getElementById("shopOverlay")?.classList.contains("hidden");
+        const shopOpen =
+            !document.getElementById("shopOverlay")?.classList.contains("hidden");
+        const resultsOpen =
+            !document.getElementById("holeCompletePanel")?.classList.contains("hidden");
         const gameplayFrozen =
             shopOpen ||
-            window.holeCompleteShown === true ||
-            window.gameOverShown === true ||
+            resultsOpen ||
             window.MenuController?.state !== "playing";
 
         let savedAmmo = null;
