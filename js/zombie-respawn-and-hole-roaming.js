@@ -23,7 +23,8 @@
             attackStrength: zombie.attackStrength,
             attackReach: zombie.attackReach,
             attackCooldownDuration: zombie.attackCooldownDuration,
-            clubDropChance: zombie.clubDropChance
+            clubDropChance: zombie.clubDropChance,
+            specialType: zombie.specialType
         };
     }
 
