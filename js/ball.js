@@ -304,37 +304,49 @@ const Ball = {
             return;
         }
 
-        //Small shadow beneath the ball
+        //Soft shadow beneath the ball
         ctx.beginPath();
         ctx.ellipse(
-            this.x + 2,
-            this.y + 3,
-            this.radius,
-            this.radius * 0.55,
+            this.x + 2.5,
+            this.y + 3.5,
+            this.radius * 1.05,
+            this.radius * 0.6,
             0,
             0,
             Math.PI * 2
         );
-    
-    ctx.fillStyle = "rgba(0,0,0,0.25)";
-    ctx.fill();
 
-    //Golf ball
-    ctx.beginPath();
-    ctx.arc(
-        this.x,
-        this.y,
-        this.radius,
-        0,
-        Math.PI * 2
-    );
+        ctx.fillStyle = "rgba(0,0,0,0.3)";
+        ctx.fill();
 
-    ctx.fillStyle = "white";
-    ctx.fill();
+        //Golf ball with a lit, slightly dimpled look
+        const shading = ctx.createRadialGradient(
+            this.x - this.radius * 0.35,
+            this.y - this.radius * 0.4,
+            this.radius * 0.1,
+            this.x,
+            this.y,
+            this.radius
+        );
+        shading.addColorStop(0, "#ffffff");
+        shading.addColorStop(0.65, "#f1f1ea");
+        shading.addColorStop(1, "#c9c9bd");
 
-    //Thin outline so it remains visible
-    ctx.strokeStyle = "#cccccc";
-    ctx.lineWidth = 1;
-    ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(
+            this.x,
+            this.y,
+            this.radius,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle = shading;
+        ctx.fill();
+
+        //Thin outline so it remains visible
+        ctx.strokeStyle = "rgba(90, 90, 80, 0.55)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
     }
 };

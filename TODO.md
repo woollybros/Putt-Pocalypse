@@ -30,7 +30,7 @@
 - [x] Shot preview
 - [x] Bank prediction
 - [x] Stability cone
-- [ ] Frame-rate independent physics
+- [x] Frame-rate independent physics
 - [ ] Fine tune bounce angles
 - [ ] Better corner collision handling
 - [ ] Slight spin / english system (optional)
@@ -69,7 +69,7 @@
 
 ## Static
 - [ ] Sand traps
-- [ ] Water hazards
+- [x] Water hazards
 - [ ] Rough
 - [ ] Ice
 - [ ] Lava
@@ -84,7 +84,7 @@
 - [ ] One-way gates
 
 ## Moving
-- [ ] Rotating windmills
+- [x] Rotating windmills
 - [ ] Sliding walls
 - [ ] Moving bumpers
 - [ ] Pendulums
@@ -122,18 +122,18 @@ Ideas:
 ## Ball
 - [ ] Ball trail
 - [ ] Motion blur
-- [ ] Better shadow
+- [x] Better shadow
 - [ ] Rolling animation
 - [ ] Spin visualization
 
 ## World
-- [ ] Grass texture variation
+- [x] Grass texture variation
 - [ ] Decorative flowers
-- [ ] Trees
+- [x] Trees
 - [ ] Rocks
 - [ ] Water animation
-- [ ] Animated flags
-- [ ] Better cup art
+- [x] Animated flags
+- [x] Better cup art
 
 ## Effects
 - [ ] Camera shake
@@ -183,19 +183,19 @@ Ideas:
 # 📊 Statistics
 
 - [ ] Total strokes
-- [ ] Personal bests
-- [ ] Hole records
+- [x] Personal bests
+- [x] Hole records
 - [ ] Total play time
 - [ ] Distance putted
 - [ ] Longest putt
-- [ ] Hole-in-one counter
+- [x] Hole-in-one counter
 
 ---
 
 # 🏆 Scoring
 
 - [ ] Bronze / Silver / Gold medals
-- [ ] Three-star system
+- [x] Three-star system
 - [ ] Time attack
 - [ ] Stroke challenge
 - [ ] Perfect round bonus
@@ -206,8 +206,8 @@ Ideas:
 # 🖥️ UI
 
 ## Menus
-- [ ] Main menu
-- [ ] Pause menu
+- [x] Main menu
+- [x] Pause menu
 - [ ] Settings
 - [ ] Credits
 
@@ -218,11 +218,11 @@ Ideas:
 - [ ] Resolution scaling
 
 ## HUD
-- [ ] Better score display
+- [x] Better score display
 - [ ] Hole preview
 - [ ] Course overview
-- [ ] Club information
-- [ ] Remaining holes
+- [x] Club information
+- [x] Remaining holes
 
 ---
 
@@ -260,9 +260,9 @@ Ideas:
 # 💾 Save Data
 
 - [ ] Save progress
-- [ ] Save best scores
+- [x] Save best scores
 - [ ] Save unlocked clubs
-- [ ] Save settings
+- [x] Save settings
 - [ ] Cloud save (future)
 
 ---
@@ -279,7 +279,7 @@ Ideas:
 # 🐞 Bugs / Technical Debt
 
 - [ ] Remove duplicate hole index
-- [ ] Make physics frame-rate independent
+- [x] Make physics frame-rate independent
 - [ ] Improve wall collision robustness
 - [ ] Continue cleaning code
 - [ ] Remove unused code

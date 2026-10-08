@@ -7,9 +7,21 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+body {
+    background:
+        radial-gradient(ellipse at 50% 40%, #1f2a1d 0%, #0d110c 70%, #070907 100%);
+    width: 100vw;
+    height: 100vh;
+}
+
 canvas {
     display: block;
+    position: absolute;
     touch-action: none;
+    border-radius: 10px;
+    box-shadow:
+        0 0 0 3px rgba(216, 199, 108, 0.18),
+        0 20px 60px rgba(0, 0, 0, 0.7);
 }
 
 .hidden {
@@ -330,4 +342,618 @@ canvas {
     .menuActions {
         grid-template-columns: 1fr;
     }
+}
+
+/* ===================================================================
+   Overhaul: title screen additions
+   =================================================================== */
+
+.titleCard {
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    padding-top: 32px;
+    padding-bottom: 26px;
+}
+
+.titleBackdrop {
+    animation: backdropDrift 40s linear infinite;
+}
+
+@keyframes backdropDrift {
+    from { background-position: 0 0, 0 0, 0 0; }
+    to { background-position: 480px 0, 0 0, 0 0; }
+}
+
+.gameTitle {
+    animation: titleWobble 5s ease-in-out infinite;
+}
+
+@keyframes titleWobble {
+    0%, 100% { transform: skew(-4deg) rotate(-1deg); }
+    50% { transform: skew(-4deg) rotate(0.6deg) translateY(-2px); }
+}
+
+.golfBallMark {
+    animation: flagBob 2.4s ease-in-out infinite;
+}
+
+@keyframes flagBob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.titleRecords {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin: 18px 0 0;
+}
+
+.recordItem {
+    padding: 8px 4px;
+    border: 1px solid rgba(216, 199, 108, 0.3);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.recordItem span {
+    display: block;
+    color: #8f9b8b;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.recordItem b {
+    display: block;
+    margin-top: 3px;
+    color: #e6d66f;
+    font-size: 18px;
+}
+
+.recordItem small {
+    color: #cdd5c8;
+    font-size: 12px;
+}
+
+.recordEmpty {
+    grid-column: 1 / -1;
+    color: #8f9b8b;
+    font-size: 13px;
+    font-style: italic;
+}
+
+.howToPlay {
+    display: grid;
+    gap: 7px;
+    margin: 18px auto 0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.28);
+    text-align: left;
+}
+
+.howToRow {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #cdd5c8;
+    font-size: 14px;
+}
+
+.howToRow span {
+    margin-left: 6px;
+}
+
+kbd {
+    display: inline-block;
+    min-width: 14px;
+    padding: 2px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-bottom-width: 3px;
+    border-radius: 5px;
+    background: #2a3328;
+    color: #f0eee0;
+    font: bold 12px Arial, sans-serif;
+    text-align: center;
+}
+
+.menuFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.menuFooter .menuHint {
+    margin: 0;
+    text-align: right;
+}
+
+.soundToggle {
+    flex: none;
+    padding: 7px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #e9e7d8;
+    font: bold 13px Arial, sans-serif;
+    cursor: pointer;
+}
+
+.soundToggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 620px) {
+    .titleRecords {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .menuFooter {
+        flex-direction: column;
+    }
+
+    .menuFooter .menuHint {
+        text-align: center;
+    }
+}
+
+/* ===================================================================
+   Overhaul: unified top HUD
+   =================================================================== */
+
+#ticketHud,
+#clubDurabilityPanel {
+    display: none !important;
+}
+
+#developerControls {
+    top: 78px;
+}
+
+#topHud {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    z-index: 14;
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    max-width: calc(100vw - 20px);
+    padding: 6px;
+    border: 2px solid rgba(216, 199, 108, 0.55);
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(28, 36, 27, 0.92), rgba(12, 16, 12, 0.92));
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    color: white;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+    pointer-events: none;
+    user-select: none;
+}
+
+.hudBlock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px 10px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    white-space: nowrap;
+}
+
+.hudLabel {
+    color: #9aa695;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+.hudStat {
+    align-items: center;
+    min-width: 46px;
+}
+
+.hudStat b {
+    font-size: 20px;
+    line-height: 1.05;
+}
+
+.hudHoleNumber {
+    color: #e6d66f;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.hudHoleNumber b {
+    font-size: 18px;
+}
+
+.hudHoleNumber span {
+    color: #9aa695;
+}
+
+.hudHoleName {
+    max-width: 180px;
+    overflow: hidden;
+    color: #f0eee0;
+    font-size: 14px;
+    font-weight: bold;
+    text-overflow: ellipsis;
+}
+
+.hudTickets b {
+    color: #ffd86e;
+}
+
+.hudBar {
+    position: relative;
+    width: 150px;
+    height: 18px;
+    margin-top: 3px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 6px;
+    background: rgba(90, 10, 10, 0.85);
+}
+
+.hudBar.slim {
+    width: 120px;
+    background: rgba(40, 40, 40, 0.85);
+}
+
+.hudBarFill {
+    height: 100%;
+    background: linear-gradient(180deg, #7fd36a, #3f9b3a);
+    transition: width 180ms ease-out;
+}
+
+#hudClubFill[data-level="worn"] {
+    background: linear-gradient(180deg, #f0cd67, #c7962e);
+}
+
+#hudClubFill[data-level="broken"] {
+    background: linear-gradient(180deg, #ef7a6c, #b33a30);
+}
+
+.hudBar em {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+}
+
+.hudHealth.danger .hudBarFill {
+    background: linear-gradient(180deg, #ef6a5c, #b0281f);
+    animation: healthPulse 0.7s ease-in-out infinite;
+}
+
+@keyframes healthPulse {
+    50% { filter: brightness(1.5); }
+}
+
+.bump {
+    animation: hudBump 260ms ease-out;
+}
+
+@keyframes hudBump {
+    40% { transform: scale(1.35); color: #ffe36a; }
+}
+
+.hudButtons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: auto;
+}
+
+.hudIconButton,
+#topHud .pauseCornerButton {
+    position: static;
+    min-width: 0;
+    height: 100%;
+    padding: 6px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.45);
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    font: bold 13px Arial, sans-serif;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.hudIconButton {
+    font-size: 17px;
+}
+
+.hudIconButton:hover,
+#topHud .pauseCornerButton:hover {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+@media (max-width: 1020px) {
+    .hudClub,
+    #hudCaddyBlock {
+        display: none;
+    }
+
+    .hudBar {
+        width: 100px;
+    }
+}
+
+@media (max-width: 720px) {
+    .hudHole .hudHoleName,
+    .hudTickets {
+        display: none;
+    }
+
+    .hudBlock {
+        padding: 3px 6px;
+    }
+}
+
+/* ===================================================================
+   Overhaul: hole intro banner
+   =================================================================== */
+
+#holeIntroBanner {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    z-index: 13;
+    min-width: 320px;
+    padding: 16px 34px 18px;
+    border-top: 3px solid #d8c76c;
+    border-bottom: 3px solid #d8c76c;
+    background: linear-gradient(90deg, transparent, rgba(10, 14, 10, 0.9) 18%, rgba(10, 14, 10, 0.9) 82%, transparent);
+    color: white;
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+#holeIntroBanner.play {
+    animation: holeIntro 2.7s ease-in-out forwards;
+}
+
+@keyframes holeIntro {
+    0% { opacity: 0; transform: translate(-50%, -50%) scaleX(0.4); }
+    12% { opacity: 1; transform: translate(-50%, -50%) scaleX(1.04); }
+    18% { transform: translate(-50%, -50%) scaleX(1); }
+    80% { opacity: 1; transform: translate(-50%, -50%) scaleX(1); }
+    100% { opacity: 0; transform: translate(-50%, -60%) scaleX(1); }
+}
+
+.introEyebrow {
+    color: #d8c76c;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.introName {
+    margin: 4px 0 6px;
+    font-size: 40px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    text-shadow: 3px 3px 0 #0b0d0b;
+}
+
+.introMeta {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    color: #cdd5c8;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* ===================================================================
+   Overhaul: results, game over, and scorecard
+   =================================================================== */
+
+#holeCompletePanel {
+    background:
+        radial-gradient(circle at 50% 40%, rgba(60, 80, 40, 0.35), transparent 50%),
+        rgba(4, 6, 4, 0.72);
+    backdrop-filter: blur(2px);
+}
+
+.resultsCard {
+    position: relative;
+    width: min(360px, calc(100vw - 40px));
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 28px 30px;
+    border: 3px solid #d8c76c;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(30, 38, 29, 0.98), rgba(14, 18, 14, 0.98));
+    box-shadow:
+        0 0 0 7px rgba(8, 10, 8, 0.8),
+        0 22px 70px rgba(0, 0, 0, 0.72);
+    animation: cardPop 380ms cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+
+@keyframes cardPop {
+    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+}
+
+.resultsCard h2 {
+    color: #e9e7d8;
+    font-size: 30px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.resultsCard.courseCard {
+    width: min(520px, calc(100vw - 40px));
+}
+
+.resultsCard.gameOverCard {
+    border-color: #a74a43;
+}
+
+.resultsCard.gameOverCard h2 {
+    color: #ff7b6e;
+}
+
+.resultsCard.tier-3 {
+    box-shadow:
+        0 0 0 7px rgba(8, 10, 8, 0.8),
+        0 0 40px rgba(255, 214, 90, 0.35),
+        0 22px 70px rgba(0, 0, 0, 0.72);
+}
+
+.resultsCard.tier-ace {
+    border-color: #ffe36a;
+    box-shadow:
+        0 0 0 7px rgba(8, 10, 8, 0.8),
+        0 0 60px rgba(255, 214, 90, 0.7),
+        0 22px 70px rgba(0, 0, 0, 0.72);
+}
+
+.resultsCard.tier-ace .scoreResult {
+    color: #ffe36a;
+    animation: aceShine 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes aceShine {
+    to { text-shadow: 0 0 18px rgba(255, 227, 106, 0.9); transform: scale(1.06); }
+}
+
+.starRow {
+    margin: -8px 0 6px;
+    font-size: 40px;
+    letter-spacing: 6px;
+}
+
+.starRow.small {
+    font-size: 26px;
+}
+
+.star {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.14);
+}
+
+.star.earned {
+    color: #ffd65a;
+    text-shadow: 0 0 12px rgba(255, 214, 90, 0.6);
+    animation: starPop 420ms cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+@keyframes starPop {
+    from { opacity: 0; transform: scale(0.2) rotate(-45deg); }
+}
+
+.newBest {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #ffe36a, #d8a73b);
+    color: #2a1d05;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: starPop 420ms 0.7s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+
+.bestLine {
+    margin-bottom: 8px;
+    color: #9aa695;
+    font-size: 13px;
+}
+
+.scoreResult {
+    color: #e6d66f;
+    text-transform: uppercase;
+}
+
+#scorecard table {
+    width: 100%;
+    margin: 4px 0 10px;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+#scorecard th {
+    padding: 6px 4px;
+    border-bottom: 2px solid rgba(216, 199, 108, 0.5);
+    color: #9aa695;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+#scorecard td {
+    padding: 5px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+#scorecard tfoot td {
+    border-top: 2px solid rgba(216, 199, 108, 0.5);
+    border-bottom: 0;
+    color: #e6d66f;
+    font-weight: bold;
+}
+
+#scorecard .cardName {
+    text-align: left;
+}
+
+#scorecard .under {
+    color: #8fe07a;
+    font-weight: bold;
+}
+
+#scorecard .over {
+    color: #ff8a7e;
+}
+
+#scorecard .cardStars {
+    color: #ffd65a;
+    letter-spacing: 1px;
+}
+
+#scorecard .cardStars span {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+.roundStats {
+    margin-bottom: 14px;
+    color: #cdd5c8;
+    font-size: 14px;
+}
+
+#continueButton {
+    border: 2px solid rgba(255, 255, 255, 0.65);
+    border-radius: 9px;
+    background: linear-gradient(180deg, #68914f, #3e6633);
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 120ms ease, filter 120ms ease;
+}
+
+#continueButton:hover {
+    background: linear-gradient(180deg, #68914f, #3e6633);
+    filter: brightness(1.12);
+    transform: translateY(-2px);
 }

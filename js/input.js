@@ -11,8 +11,15 @@ const Pointer = {
     updatePosition(event) {
         const canvasBounds = canvas.getBoundingClientRect();
 
-        this.x = event.clientX - canvasBounds.left;
-        this.y = event.clientY - canvasBounds.top;
+        /*
+            The canvas is CSS-scaled to fit the window, so convert from
+            screen pixels back into fixed world coordinates.
+        */
+        const scaleX = canvas.width / (canvasBounds.width || canvas.width);
+        const scaleY = canvas.height / (canvasBounds.height || canvas.height);
+
+        this.x = (event.clientX - canvasBounds.left) * scaleX;
+        this.y = (event.clientY - canvasBounds.top) * scaleY;
     },
 
     endFrame() {

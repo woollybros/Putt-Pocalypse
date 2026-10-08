@@ -852,20 +852,48 @@ function draw() {
 
     Player.draw();
 
-    drawPlayerHealthBar();
-
     //drawDeveloperHud();
 }
 
+/*
+    Fixed-timestep simulation.
+
+    Ball physics is tuned per 60 Hz step, so the game advances in fixed
+    1/60 s steps regardless of monitor refresh rate. Frame times close to
+    1/60 are snapped to avoid occasional double/skipped steps from jitter.
+*/
+const FIXED_STEP = 1 / 60;
+const MAX_STEPS_PER_FRAME = 5;
+let stepAccumulator = 0;
+
 function loop(currentTime) {
-    const deltaTime = Math.min(
-        (currentTime - previousTime) / 1000,
-        0.05
-    );
+    let frameTime = previousTime
+        ? (currentTime - previousTime) / 1000
+        : FIXED_STEP;
 
     previousTime = currentTime;
 
-    update(deltaTime);
+    if (Math.abs(frameTime - FIXED_STEP) < 0.002) {
+        frameTime = FIXED_STEP;
+    }
+
+    stepAccumulator += Math.min(Math.max(frameTime, 0), 0.25);
+
+    let steps = 0;
+
+    while (
+        stepAccumulator >= FIXED_STEP &&
+        steps < MAX_STEPS_PER_FRAME
+    ) {
+        update(FIXED_STEP);
+        stepAccumulator -= FIXED_STEP;
+        steps++;
+    }
+
+    if (steps === MAX_STEPS_PER_FRAME) {
+        stepAccumulator = 0;
+    }
+
     draw();
 
     requestAnimationFrame(loop);

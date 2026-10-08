@@ -61,14 +61,15 @@
         originalWorldDraw();
 
         /*
-            Temporary course fence for the fixed-camera version of the game.
-            This can be removed when the camera begins following the player.
+            Wrought-iron graveyard fence marking the edge of the playable world.
         */
         const inset = 6;
+        const right = canvas.width - inset;
+        const bottom = canvas.height - inset;
 
         ctx.save();
-        ctx.strokeStyle = "rgba(43, 58, 38, 0.85)";
-        ctx.lineWidth = 8;
+        ctx.strokeStyle = "rgba(12, 14, 11, 0.85)";
+        ctx.lineWidth = 5;
         ctx.strokeRect(
             inset,
             inset,
@@ -76,14 +77,37 @@
             canvas.height - inset * 2
         );
 
-        ctx.strokeStyle = "rgba(205, 220, 190, 0.35)";
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = "rgba(160, 170, 150, 0.22)";
+        ctx.lineWidth = 1;
         ctx.strokeRect(
-            inset + 5,
-            inset + 5,
-            canvas.width - (inset + 5) * 2,
-            canvas.height - (inset + 5) * 2
+            inset + 4,
+            inset + 4,
+            canvas.width - (inset + 4) * 2,
+            canvas.height - (inset + 4) * 2
         );
+
+        // Fence posts with spear tips.
+        ctx.fillStyle = "#151812";
+
+        const drawPost = (x, y) => {
+            ctx.fillRect(x - 3, y - 3, 6, 6);
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(190, 200, 180, 0.35)";
+            ctx.fill();
+            ctx.fillStyle = "#151812";
+        };
+
+        for (let x = inset; x <= right; x += 48) {
+            drawPost(x, inset);
+            drawPost(x, bottom);
+        }
+
+        for (let y = inset; y <= bottom; y += 48) {
+            drawPost(inset, y);
+            drawPost(right, y);
+        }
+
         ctx.restore();
     };
 

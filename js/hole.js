@@ -1014,34 +1014,201 @@ const Hole = {
         ctx.restore();
     },
 
+    drawTeePad() {
+        const tee = this.tee;
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.roundRect(tee.x - 18, tee.y - 18, 36, 36, 6);
+        ctx.fillStyle = "rgba(30, 70, 28, 0.45)";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.22)";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Two red tee markers.
+        for (const offsetY of [-24, 24]) {
+            ctx.beginPath();
+            ctx.arc(tee.x - 6, tee.y + offsetY, 4, 0, Math.PI * 2);
+            ctx.fillStyle = "#c63a32";
+            ctx.fill();
+            ctx.strokeStyle = "#5e1612";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+        }
+
+        ctx.restore();
+    },
+
+    drawCup() {
+        const cup = this.cup;
+
+        ctx.save();
+
+        // Worn ring of putting-green around the cup.
+        const ring = ctx.createRadialGradient(
+            cup.x, cup.y, cup.radius,
+            cup.x, cup.y, cup.radius * 3.4
+        );
+        ring.addColorStop(0, "rgba(140, 220, 120, 0.35)");
+        ring.addColorStop(1, "rgba(140, 220, 120, 0)");
+        ctx.fillStyle = ring;
+        ctx.beginPath();
+        ctx.arc(cup.x, cup.y, cup.radius * 3.4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // White rim.
+        ctx.beginPath();
+        ctx.arc(cup.x, cup.y, cup.radius + 2, 0, Math.PI * 2);
+        ctx.fillStyle = "#e9e6d6";
+        ctx.fill();
+
+        // Hole interior with depth.
+        const interior = ctx.createRadialGradient(
+            cup.x - 2, cup.y - 3, 1,
+            cup.x, cup.y, cup.radius
+        );
+        interior.addColorStop(0, "#050505");
+        interior.addColorStop(0.7, "#141414");
+        interior.addColorStop(1, "#2e2e2e");
+        ctx.beginPath();
+        ctx.arc(cup.x, cup.y, cup.radius, 0, Math.PI * 2);
+        ctx.fillStyle = interior;
+        ctx.fill();
+
+        ctx.restore();
+    },
+
+    drawFlag() {
+        const cup = this.cup;
+        const time = performance.now() / 1000;
+        const poleTop = cup.y - 58;
+
+        // Fade the flag when the ball is close so it never hides a putt.
+        const ballDistance = Math.hypot(Ball.x - cup.x, Ball.y - cup.y);
+        const alpha = ballDistance < 70 ? 0.45 : 1;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+
+        // Pole shadow on the turf.
+        ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(cup.x, cup.y);
+        ctx.lineTo(cup.x + 26, cup.y - 18);
+        ctx.stroke();
+
+        // Pole.
+        ctx.strokeStyle = "#f2f0e6";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(cup.x, cup.y);
+        ctx.lineTo(cup.x, poleTop);
+        ctx.stroke();
+
+        // Waving pennant.
+        const flagLength = 30;
+        const flagHeight = 18;
+        const segments = 8;
+
+        ctx.beginPath();
+        ctx.moveTo(cup.x, poleTop);
+
+        for (let index = 1; index <= segments; index++) {
+            const t = index / segments;
+            const wave = Math.sin(time * 6 - t * 4) * 4 * t;
+            ctx.lineTo(
+                cup.x + t * flagLength,
+                poleTop + t * flagHeight / 2 + wave
+            );
+        }
+
+        for (let index = segments; index >= 0; index--) {
+            const t = index / segments;
+            const wave = Math.sin(time * 6 - t * 4) * 4 * t;
+            ctx.lineTo(
+                cup.x + t * flagLength,
+                poleTop + flagHeight - t * flagHeight / 2 + wave
+            );
+        }
+
+        ctx.closePath();
+        ctx.fillStyle = "#d23a2f";
+        ctx.fill();
+        ctx.strokeStyle = "#6e1712";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Hole number on the pennant.
+        ctx.fillStyle = "white";
+        ctx.font = "bold 10px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(
+            String(this.number),
+            cup.x + 11,
+            poleTop + flagHeight / 2 + Math.sin(time * 6 - 1.5) * 1.5
+        );
+
+        // Pole cap.
+        ctx.beginPath();
+        ctx.arc(cup.x, poleTop, 3, 0, Math.PI * 2);
+        ctx.fillStyle = "#ffd65a";
+        ctx.fill();
+
+        ctx.restore();
+    },
+
+    drawWalls() {
+        const visibleWalls =
+            this.walls.filter(wall => wall.visible !== false);
+
+        // Shadows first so they never cover a neighbouring wall.
+        ctx.save();
+        ctx.fillStyle = "rgba(0, 0, 0, 0.32)";
+
+        for (const wall of visibleWalls) {
+            ctx.fillRect(wall.x + 4, wall.y + 5, wall.width, wall.height);
+        }
+
+        ctx.restore();
+
+        for (const wall of visibleWalls) {
+            ctx.save();
+
+            const gradient = ctx.createLinearGradient(
+                wall.x,
+                wall.y,
+                wall.x,
+                wall.y + wall.height
+            );
+            gradient.addColorStop(0, "#e6dcbf");
+            gradient.addColorStop(1, "#b9aa86");
+            ctx.fillStyle = gradient;
+            ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+
+            // Top bevel highlight and bottom edge.
+            ctx.fillStyle = "rgba(255, 255, 255, 0.35)";
+            ctx.fillRect(wall.x, wall.y, wall.width, 3);
+            ctx.fillStyle = "rgba(70, 55, 30, 0.35)";
+            ctx.fillRect(wall.x, wall.y + wall.height - 3, wall.width, 3);
+
+            ctx.strokeStyle = "#6c6048";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(wall.x, wall.y, wall.width, wall.height);
+
+            ctx.restore();
+        }
+    },
+
     draw() {
-        // Cup shadow / opening
-        ctx.beginPath();
+        this.drawTeePad();
 
-        ctx.arc(
-            this.cup.x,
-            this.cup.y,
-            this.cup.radius,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fillStyle = "#1b1b1b";
-        ctx.fill();
-
-        // Small inner highlight for depth
-        ctx.beginPath();
-
-        ctx.arc(
-            this.cup.x - 2,
-            this.cup.y - 2,
-            this.cup.radius * 0.45,
-            0,
-            Math.PI * 2
-        );
-
-        ctx.fillStyle = "#333333";
-        ctx.fill();
+        this.drawCup();
 
         /*
             Draw special hole features before the regular
@@ -1049,57 +1216,9 @@ const Hole = {
         */
         this.drawWindmill();
 
-        // Walls
-        for (const wall of this.walls) {
-            if (wall.visible === false) {
-                continue;
-            }
+        this.drawWalls();
 
-            ctx.fillStyle = "#d9d1b8";
-
-            ctx.fillRect(
-                wall.x,
-                wall.y,
-                wall.width,
-                wall.height
-            );
-
-            ctx.strokeStyle = "#756d5a";
-            ctx.lineWidth = 2;
-
-            ctx.strokeRect(
-                wall.x,
-                wall.y,
-                wall.width,
-                wall.height
-            );
-        }
-
-        // Temporary hole information
-        ctx.save();
-
-        ctx.font = "bold 18px Arial";
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-
-        ctx.fillStyle =
-            "rgba(255, 255, 255, 0.9)";
-
-        ctx.fillText(
-            `Hole ${this.number}: ${this.name}`,
-            20,
-            20
-        );
-
-        ctx.font = "15px Arial";
-
-        ctx.fillText(
-            `Par ${this.par}`,
-            20,
-            44
-        );
-
-        ctx.restore();
+        this.drawFlag();
     }
 };
 
